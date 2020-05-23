@@ -41,6 +41,7 @@ mutation updateRequest {
 ```
 Put an `_id` of a one of the requests. You can see all requests by running `getRequests` query.
 
+---
 **Subscriptions**
 1. __TIMER PASSED__
 ```
