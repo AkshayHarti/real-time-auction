@@ -9,7 +9,7 @@ __This project currently just includes a gql server__
 **Queries**
 
 1. GET REQUESTS
-`
+```
 {
   getRequests {
     _id
@@ -17,7 +17,7 @@ __This project currently just includes a gql server__
     status
   }
 }
-`
+```
 
 **Mutations**
 
