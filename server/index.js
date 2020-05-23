@@ -62,10 +62,13 @@ const resolvers = {
     updateRequest: (_, { _id }) => {
       const index = requests.findIndex((request) => request._id === _id);
 
-      let dueDate = requests[index].dueDate;
-      dueDate = new Date(new Date(dueDate).getTime() + 60000).toISOString();
+      const dueDate = new Date(
+        new Date(requests[index].dueDate).getTime() + 60000
+      ).toISOString();
+
       clearTimeout(timeouts[_id]);
       timeouts[_id] = setAgenda({ _id, dueDate, index });
+
       pubsub.publish(TIMER_UPDATED, {
         timerUpdated: requests[index],
       });
