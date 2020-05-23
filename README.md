@@ -18,7 +18,7 @@ Real-time auction
   }
 }
 ```
-
+---
 **Mutations**
 
 1. __ADD REQUEST__
