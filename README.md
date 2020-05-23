@@ -1,14 +1,14 @@
 # real-time-auction
 Real-time auction
 
-__This project currently just includes a gql server__
+##This project currently just includes a gql server
 
-**Start server**
+####Start server
 `npm start`
 
 **Queries**
 
-1. GET REQUESTS
+1. __GET REQUESTS__
 ```
 {
   getRequests {
@@ -21,7 +21,7 @@ __This project currently just includes a gql server__
 
 **Mutations**
 
-1. ADD REQUEST
+1. __ADD REQUEST__
 `
 mutation addRequest {
   addRequest(dueDate: "2020-05-23T03:15:20.916Z", status: "finalized")
@@ -29,7 +29,7 @@ mutation addRequest {
 `
 Generate `dueDate` as `new Date(Date.now() + 60000).toISOString()`
 
-2. UPDATE REQUEST
+2. __UPDATE REQUEST__
 `
 mutation updateRequest {
   updateRequest(_id: "d315e374-4e79-45f3-a15c-dd90bb132257") {
@@ -42,7 +42,7 @@ mutation updateRequest {
 Put an `_id` of a one of the requests. You can see all requests by running `getRequests` query.
 
 **Subscriptions**
-1. TIMER PASSED
+1. __TIMER PASSED__
 `
 subscription timerPassed {
   timerPassed {
@@ -53,7 +53,7 @@ subscription timerPassed {
 }
 `
 
-2. TIMER UPDATED
+2. __TIMER UPDATED__
 `
 subscription timerUpdated {
   timerUpdated {
