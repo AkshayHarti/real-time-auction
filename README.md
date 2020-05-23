@@ -26,7 +26,7 @@ mutation addRequest {
   addRequest(dueDate: "2020-05-23T03:15:20.916Z", status: "finalized")
 }
 ```
-Generate `dueDate` as `new Date(Date.now() + 60000).toISOString()`
+Generate `dueDate` e.g. `new Date(Date.now() + 60000).toISOString()`
 
 2. __UPDATE REQUEST__
 ```
