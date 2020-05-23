@@ -22,15 +22,15 @@ Real-time auction
 **Mutations**
 
 1. __ADD REQUEST__
-`
+```
 mutation addRequest {
   addRequest(dueDate: "2020-05-23T03:15:20.916Z", status: "finalized")
 }
-`
+```
 Generate `dueDate` as `new Date(Date.now() + 60000).toISOString()`
 
 2. __UPDATE REQUEST__
-`
+```
 mutation updateRequest {
   updateRequest(_id: "d315e374-4e79-45f3-a15c-dd90bb132257") {
     _id
@@ -38,12 +38,12 @@ mutation updateRequest {
     status
   }
 }
-`
+```
 Put an `_id` of a one of the requests. You can see all requests by running `getRequests` query.
 
 **Subscriptions**
 1. __TIMER PASSED__
-`
+```
 subscription timerPassed {
   timerPassed {
     _id
@@ -51,10 +51,10 @@ subscription timerPassed {
     status
   }
 }
-`
+```
 
 2. __TIMER UPDATED__
-`
+```
 subscription timerUpdated {
   timerUpdated {
     _id
@@ -62,4 +62,4 @@ subscription timerUpdated {
     status
   }
 }
-`
+```
