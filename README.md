@@ -1,9 +1,9 @@
 # real-time-auction
 Real-time auction
 
-##This project currently just includes a gql server
+## This project currently just includes a gql server
 
-####Start server
+#### Start server
 `npm start`
 
 **Queries**
