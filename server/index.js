@@ -41,11 +41,10 @@ const setAgenda = ({ _id, dueDate, index }) =>
   setTimeout(() => {
     clearTimeout(timeouts[_id]);
     delete timeouts[_id];
-    pubsub.publish(TIMER_PASSED, {
-      timerPassed: { _id, dueDate, status: "closed" },
-    });
-
     requests[index].status = "closed";
+    pubsub.publish(TIMER_PASSED, {
+      timerPassed: requests[index],
+    });
   }, new Date(dueDate) - new Date());
 
 const resolvers = {
