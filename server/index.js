@@ -50,8 +50,6 @@ const schema = gql`
 
 const setAgenda = ({ _id, dueDate, index }) =>
   setTimeout(() => {
-    console.log({ LOG: timeouts[_id] });
-
     clearTimeout(timeouts[_id]);
     delete timeouts[_id];
     requests[index].status = "closed";
@@ -81,10 +79,8 @@ const resolvers = {
       }
       clearInterval(timeouts[_id]);
       delete timeouts[_id];
-      console.log({ request: requests[index] });
 
       requests[index] = { ...requests[index], status: "closed" };
-      console.log({ request: requests[index] });
       return requests[index];
     },
     addProposal: (_, { requestId, status }) => {
