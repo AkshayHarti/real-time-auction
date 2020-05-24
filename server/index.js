@@ -8,7 +8,7 @@ const uuid = require("uuid");
  * @param: dueDate
  */
 const requests = [];
-
+const proposals = [];
 const timeouts = {};
 
 const pubsub = new PubSub();
@@ -22,13 +22,24 @@ const schema = gql`
     status: String!
   }
 
+  type Proposal {
+    _id: ID!
+    requestId: ID!
+    status: String!
+  }
+
   type Query {
     getRequests: [Request]!
+    getProposals: [Proposal]!
+    getTimeouts: [ID]!
   }
 
   type Mutation {
-    addRequest(dueDate: String!, status: String!): Boolean
+    addRequest(dueDate: String!, status: String!): Request!
     updateRequest(_id: ID!): Request!
+    closeRequest(_id: ID!): Request!
+    addProposal(requestId: ID!, status: String!): Proposal!
+    updateProposal(_id: ID!): String!
   }
 
   type Subscription {
@@ -39,6 +50,8 @@ const schema = gql`
 
 const setAgenda = ({ _id, dueDate, index }) =>
   setTimeout(() => {
+    console.log({ LOG: timeouts[_id] });
+
     clearTimeout(timeouts[_id]);
     delete timeouts[_id];
     requests[index].status = "closed";
@@ -50,6 +63,8 @@ const setAgenda = ({ _id, dueDate, index }) =>
 const resolvers = {
   Query: {
     getRequests: () => requests,
+    getProposals: () => proposals,
+    getTimeouts: () => Object.keys(timeouts),
   },
   Mutation: {
     addRequest: (_, { dueDate, status }) => {
@@ -57,24 +72,77 @@ const resolvers = {
       requests.push({ _id, dueDate, status });
       const index = requests.length - 1;
       timeouts[_id] = setAgenda({ _id, dueDate, index });
-      return true;
+      return requests[index];
     },
-    updateRequest: (_, { _id }) => {
+    closeRequest: (_, { _id }) => {
       const index = requests.findIndex((request) => request._id === _id);
+      if (index === -1) {
+        throw new Error("Request not found!");
+      }
+      clearInterval(timeouts[_id]);
+      delete timeouts[_id];
+      console.log({ request: requests[index] });
+
+      requests[index] = { ...requests[index], status: "closed" };
+      console.log({ request: requests[index] });
+      return requests[index];
+    },
+    addProposal: (_, { requestId, status }) => {
+      const _id = uuid.v4();
+      const index = requests.findIndex((request) => request._id === requestId);
+      if (index === -1) {
+        throw new Error("Request not present");
+      }
+      const currentProposal = { _id, requestId, status };
+      proposals.push(currentProposal);
 
       const dueDate = new Date(
         new Date(requests[index].dueDate).getTime() + 60000
       ).toISOString();
 
-      clearTimeout(timeouts[_id]);
-      timeouts[_id] = setAgenda({ _id, dueDate, index });
+      clearTimeout(timeouts[requests[index]._id]);
+      timeouts[requests[index]._id] = setAgenda({
+        _id: requests[index]._id,
+        dueDate,
+        index,
+      });
 
       pubsub.publish(TIMER_UPDATED, {
         timerUpdated: requests[index],
       });
 
       requests[index] = { ...requests[index], dueDate };
-      return requests[index];
+      return currentProposal;
+    },
+    updateProposal: (_, { _id }) => {
+      const proposal = proposals.find((proposal) => proposal._id === _id);
+      if (!proposal) {
+        throw new Error("Proposal not found!");
+      }
+      const requestIndex = requests.findIndex(
+        (request) => request._id === proposal.requestId
+      );
+
+      const dueDate = new Date(
+        new Date(requests[requestIndex].dueDate).getTime() + 60000
+      ).toISOString();
+
+      clearTimeout(timeouts[requests[requestIndex]._id]);
+      timeouts[requests[requestIndex]._id] = setAgenda({
+        _id: requests[requestIndex]._id,
+        dueDate,
+        index: requestIndex,
+      });
+
+      pubsub.publish(TIMER_UPDATED, {
+        timerUpdated: requests[requestIndex],
+      });
+
+      requests[requestIndex] = { ...requests[requestIndex], dueDate };
+      return `Request due date is after ${(
+        (new Date(dueDate) - new Date()) /
+        60000
+      ).toFixed(2)} minutes`;
     },
   },
   Subscription: {
