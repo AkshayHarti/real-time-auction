@@ -1,13 +1,12 @@
-const uuid = require("uuid");
-
 module.exports = (
   _,
-  { dueDate, status },
+  { _id, dueDate, status },
   { requests, timeouts, agenda, pubsub, constants }
 ) => {
-  const _id = uuid.v4();
-  requests.push({ _id, dueDate, status });
-  const index = requests.length - 1;
+  const index = requests.findIndex((request) => request._id === _id);
+  requests[index].dueDate = dueDate;
+  requests[index].status = status;
+
   timeouts[_id] = agenda({
     _id,
     dueDate,

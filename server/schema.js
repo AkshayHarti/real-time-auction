@@ -27,7 +27,8 @@ module.exports = gql`
   }
 
   type Mutation {
-    addRequest(dueDate: String!, status: String!): Request!
+    createRequest: ID!
+    submitRequest(_id: ID!, dueDate: String!, status: String!): Request!
     updateRequest(_id: ID!): Request!
     closeRequest(_id: ID!): Request!
     addProposal(requestId: ID!, status: String!): Proposal!

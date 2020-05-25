@@ -3,7 +3,8 @@ const http = require("http");
 const express = require("express");
 const schema = require("./schema");
 const agenda = require("./agenda");
-const addRequest = require("./resolvers/addRequest");
+const createRequest = require("./resolvers/createRequest");
+const submitRequest = require("./resolvers/submitRequest");
 const closeRequest = require("./resolvers/closeRequest");
 const addProposal = require("./resolvers/addProposal");
 const updateProposal = require("./resolvers/updateProposal");
@@ -21,7 +22,8 @@ const resolvers = {
     getTimeouts: (_, __, { timeouts }) => Object.keys(timeouts),
   },
   Mutation: {
-    addRequest,
+    createRequest,
+    submitRequest,
     closeRequest,
     addProposal,
     updateProposal,
