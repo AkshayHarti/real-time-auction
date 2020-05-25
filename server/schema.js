@@ -3,15 +3,15 @@ const { gql } = require("apollo-server-express");
 module.exports = gql`
   type Request {
     _id: ID!
-    dueDate: String!
-    status: String!
+    dueDate: String
+    status: String
     event: RequestEvent
   }
 
   type Proposal {
     _id: ID!
     requestId: ID!
-    status: String!
+    status: String
   }
 
   enum RequestEvent {
@@ -28,7 +28,7 @@ module.exports = gql`
 
   type Mutation {
     createRequest: ID!
-    submitRequest(_id: ID!, dueDate: String!, status: String!): Request!
+    submitRequest(_id: ID!, dueDate: String!): Request!
     updateRequest(_id: ID!): Request!
     closeRequest(_id: ID!): Request!
     addProposal(requestId: ID!, status: String!): Proposal!
