@@ -26,8 +26,8 @@ module.exports = (
     timeouts,
   });
 
-  pubsub.publish(constants.TIMER_UPDATED, {
-    timerUpdated: requests[index],
+  pubsub.publish(constants.REQUEST_EVENT, {
+    requestEvent: { ...requests[index], event: "REQUEST_EXTENDED" },
   });
 
   requests[index] = { ...requests[index], dueDate };

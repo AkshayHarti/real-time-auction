@@ -5,12 +5,19 @@ module.exports = gql`
     _id: ID!
     dueDate: String!
     status: String!
+    event: RequestEvent
   }
 
   type Proposal {
     _id: ID!
     requestId: ID!
     status: String!
+  }
+
+  enum RequestEvent {
+    REQUEST_SUBMITTED
+    REQUEST_CLOSED
+    REQUEST_EXTENDED
   }
 
   type Query {
@@ -28,7 +35,6 @@ module.exports = gql`
   }
 
   type Subscription {
-    timerPassed: Request!
-    timerUpdated: Request!
+    requestEvent: Request!
   }
 `;

@@ -11,8 +11,7 @@ const updateProposal = require("./resolvers/updateProposal");
 const pubsub = new PubSub();
 
 const constants = {
-  TIMER_PASSED: "TIMER_PASSED",
-  TIMER_UPDATED: "TIMER_UPDATED",
+  REQUEST_EVENT: "REQUEST_EVENT",
 };
 
 const resolvers = {
@@ -28,13 +27,9 @@ const resolvers = {
     updateProposal,
   },
   Subscription: {
-    timerPassed: {
+    requestEvent: {
       // Additional event labels can be passed to asyncIterator creation
-      subscribe: () => pubsub.asyncIterator([constants.TIMER_PASSED]),
-    },
-    timerUpdated: {
-      // Additional event labels can be passed to asyncIterator creation
-      subscribe: () => pubsub.asyncIterator([constants.TIMER_UPDATED]),
+      subscribe: () => pubsub.asyncIterator([constants.REQUEST_EVENT]),
     },
   },
 };
