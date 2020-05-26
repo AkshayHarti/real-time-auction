@@ -1,4 +1,4 @@
-const { ApolloServer, PubSub } = require("apollo-server-express");
+const { ApolloServer, PubSub, withFilter } = require("apollo-server-express");
 const http = require("http");
 const express = require("express");
 const schema = require("./schema");
@@ -18,6 +18,17 @@ const constants = {
 const resolvers = {
   Query: {
     getRequests: (_, __, { requests }) => requests,
+    getOpenRequests: (_, __, { requests }) =>
+      requests.filter((request) => request.status === "finalized"),
+    getRequest: (_, { _id }, { requests }) => {
+      const request = requests.find((request) => request._id === _id);
+
+      if (request) {
+        return request;
+      }
+
+      throw new Error("Request not present");
+    },
     getProposals: (_, __, { proposals }) => proposals,
     getTimeouts: (_, __, { timeouts }) => Object.keys(timeouts),
   },
@@ -31,7 +42,13 @@ const resolvers = {
   Subscription: {
     requestEvent: {
       // Additional event labels can be passed to asyncIterator creation
-      subscribe: () => pubsub.asyncIterator([constants.REQUEST_EVENT]),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator([constants.REQUEST_EVENT]),
+        (payload, variables) => {
+          console.log({ payload, variables });
+          return payload.requestEvent._id === variables._id;
+        }
+      ),
     },
   },
 };

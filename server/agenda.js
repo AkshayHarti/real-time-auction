@@ -12,4 +12,4 @@ module.exports = (pubsub, constants) => ({
     pubsub.publish(constants.REQUEST_EVENT, {
       requestEvent: { ...requests[index], event: "REQUEST_CLOSED" },
     });
-  }, new Date(dueDate) - new Date());
+  }, new Date(dueDate) - new Date() + 5000);

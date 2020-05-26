@@ -22,6 +22,8 @@ module.exports = gql`
 
   type Query {
     getRequests: [Request]!
+    getRequest(_id: ID!): Request!
+    getOpenRequests: [Request]!
     getProposals: [Proposal]!
     getTimeouts: [ID]!
   }
@@ -36,6 +38,6 @@ module.exports = gql`
   }
 
   type Subscription {
-    requestEvent: Request!
+    requestEvent(_id: ID!): Request!
   }
 `;
